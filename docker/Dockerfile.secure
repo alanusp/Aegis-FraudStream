@@ -6,7 +6,7 @@ COPY pyproject.toml .
 COPY aegis_fraudstream aegis_fraudstream
 RUN pip install --no-cache-dir -e .
 
-FROM gcr.io/distroless/python3-debian12@sha256:9d9a8e7f2a5f5c7d9e4e9b22d2b8b6a8b9c9d9e8f7c7a6b5a4a3a2a1a0b0c0d0
+FROM gcr.io/distroless/python3-debian12@sha256:a0ded8676ed10e194cce1b8fdf9171672cda95ad1cabba4ece7b01f4db2e7471
 WORKDIR /app
 USER 65532:65532
 ENV PYTHONPATH=/app
