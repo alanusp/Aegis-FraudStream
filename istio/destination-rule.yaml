@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata: { name: aegis-dr, namespace: aegis }
+spec:
+  host: aegis-svc.aegis.svc.cluster.local
+  trafficPolicy: { tls: { mode: ISTIO_MUTUAL } }

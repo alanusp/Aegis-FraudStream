@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "aegis-fraudstream.fullname" . }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels: {{- include "aegis-fraudstream.selectorLabels" . | nindent 6 }}

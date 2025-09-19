@@ -1,0 +1,3 @@
+- Hardware acceleration option
+- Multi-language clients
+- Advanced feature stores

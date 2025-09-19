@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata: { name: aegis-rollout }
+spec:
+  replicas: 2
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: { duration: 60 }
+      - setWeight: 50
+      - pause: { duration: 120 }
+      - setWeight: 100
+  selector: { matchLabels: { app: aegis } }
+  template:
+    metadata: { labels: { app: aegis } }
+    spec:
+      containers:
+      - name: api
+        image: ghcr.io/ORG/REPO:main
+        ports: [{ containerPort: 8080 }]

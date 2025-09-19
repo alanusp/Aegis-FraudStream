@@ -1,0 +1,5 @@
+# Base runtime minimal pins; dev extras handled via pyproject
+orjson
+uvicorn
+fastapi
+pydantic

@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aegis
+  labels:
+    pod-security.kubernetes.io/enforce: "restricted"
+    pod-security.kubernetes.io/audit: "restricted"
+    pod-security.kubernetes.io/warn: "restricted"
+---
+apiVersion: v1
+kind: LimitRange
+metadata: { name: aegis-limits, namespace: aegis }
+spec:
+  limits:
+  - type: Container
+    default: { cpu: "500m", memory: "512Mi" }
+    defaultRequest: { cpu: "100m", memory: "128Mi" }
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata: { name: aegis-quota, namespace: aegis }
+spec:
+  hard:
+    pods: "20"
+    requests.cpu: "4"
+    requests.memory: "8Gi"
+    limits.cpu: "8"
+    limits.memory: "16Gi"

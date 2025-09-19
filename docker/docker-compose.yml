@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2025 Aegis FraudStream Authors
+
+version: '3.9'
+services:
+  api:
+    build: { context: '..', dockerfile: 'docker/Dockerfile', target: runtime }
+    env_file: ../.env.example
+    ports: ['8080:8080']
+    depends_on: [redis]
+  redis:
+    image: redis:7-alpine
+    ports: ['6379:6379']

@@ -1,0 +1,7 @@
+{
+  "include": [
+    "aegis_fraudstream"
+  ],
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "strict"
+}

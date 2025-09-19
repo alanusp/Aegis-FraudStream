@@ -1,0 +1,20 @@
+{
+  "info": {
+    "name": "Aegis API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Infer",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{base}}/v1/inference",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"user_id\":\"u1\",\"amount\":10,\"tx_count_1h\":1,\"country_risk\":0.1}"
+        }
+      }
+    }
+  ]
+}

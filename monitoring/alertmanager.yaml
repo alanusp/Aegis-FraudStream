@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: Apache-2.0
+route:
+  group_by: ['alertname']
+  receiver: 'default'
+  routes:
+    - matchers: ['severity="critical"']
+      receiver: 'pager'
+receivers:
+  - name: 'default'
+    email_configs: [{ to: 'devnull@example.com' }]
+  - name: 'pager'
+    pagerduty_configs: [{ routing_key: 'PD_ROUTING_KEY' }]

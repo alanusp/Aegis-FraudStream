@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: Apache-2.0
+suite: Deployment tests
+templates:
+  - templates/deployment.yaml
+tests:
+  - it: uses non-root user
+    asserts:
+      - isKind:
+          of: Deployment
+      - matchRegex:
+          path: spec.template.spec.securityContext.runAsUser
+          pattern: ".+"

@@ -1,0 +1,11 @@
+<!doctype html><meta charset="utf-8"><title>Aegis Playground</title>
+<h1>Aegis FraudStream Playground</h1>
+<input id="base" value="http://localhost:8080"><button onclick="infer()">Infer</button>
+<pre id="out"></pre>
+<script>
+async function infer(){
+  const base=document.getElementById('base').value;
+  const r=await fetch(base+'/v1/inference',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({user_id:'u1',amount:12,tx_count_1h:1,country_risk:0.1})});
+  document.getElementById('out').textContent=await r.text();
+}
+</script>

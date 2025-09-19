@@ -1,0 +1,6 @@
+{
+  "extends": ["config:recommended"],
+  "timezone": "America/Mexico_City",
+  "labels": ["deps"],
+  "vulnerabilityAlerts": {"enabled": true}
+}

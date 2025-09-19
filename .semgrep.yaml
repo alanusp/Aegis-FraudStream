@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+rules:
+- id: no-debug-secrets
+  patterns:
+    - pattern: print($X)
+  message: Avoid printing secrets or sensitive data.
+  severity: INFO

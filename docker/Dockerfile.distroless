@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: Apache-2.0
+FROM python:3.11-slim AS build
+WORKDIR /app
+COPY . /app
+RUN pip install --no-cache-dir -e .
+
+FROM gcr.io/distroless/python3-debian12:nonroot
+WORKDIR /app
+COPY --from=build /usr/local/lib/python3.11 /usr/local/lib/python3.11
+COPY --from=build /usr/local/bin/uvicorn /usr/local/bin/uvicorn
+COPY --from=build /app /app
+EXPOSE 8080
+USER nonroot
+ENV PYTHONPATH=/app
+CMD ["uvicorn","aegis_fraudstream.app:app","--host","0.0.0.0","--port","8080"]

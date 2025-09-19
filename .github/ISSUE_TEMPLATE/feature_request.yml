@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+name: Feature request
+description: Suggest an idea
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: summary
+    attributes: { label: Summary, description: What do you want to build? }
+    validations: { required: true }

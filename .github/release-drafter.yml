@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: Apache-2.0
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: 'Features'
+    labels: ['feat']
+  - title: 'Fixes'
+    labels: ['fix']
+  - title: 'Security'
+    labels: ['security']
+  - title: 'Chores'
+    labels: ['chore']
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+version-resolver:
+  major:
+    labels: ['major']
+  minor:
+    labels: ['feat']
+  patch:
+    labels: ['fix','chore','security']
+template: |
+  ## Changes
+  $CHANGES

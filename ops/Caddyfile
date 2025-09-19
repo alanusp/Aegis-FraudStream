@@ -1,0 +1,15 @@
+{
+  email you@example.com
+}
+aegis.example.com {
+  reverse_proxy 127.0.0.1:8080
+  encode gzip
+  header {
+    Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "no-referrer"
+    Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    Content-Security-Policy "default-src 'none'; frame-ancestors 'none'; base-uri 'none'"
+  }
+}

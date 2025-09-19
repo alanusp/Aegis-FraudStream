@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredLabels
+metadata: { name: must-have-owner }
+spec:
+  match:
+    kinds: [{ apiGroups: [""], kinds: ["Namespace","Pod","Deployment"] }]
+  parameters:
+    labels: ["owner","system"]

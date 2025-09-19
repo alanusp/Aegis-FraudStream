@@ -1,0 +1,3 @@
+- Autoscaling via HPA
+- Slim images
+- Caching where safe

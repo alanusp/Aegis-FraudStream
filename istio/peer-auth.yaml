@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata: { name: aegis-namespace, namespace: aegis }
+spec: { mtls: { mode: STRICT } }

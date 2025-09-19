@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: litmuschaos.io/v1alpha1
+kind: ChaosEngine
+metadata: { name: pod-delete, namespace: litmus }
+spec:
+  engineState: active
+  chaosServiceAccount: litmus-admin
+  experiments: [{ name: pod-delete, spec: { components: { appinfo: { appns: "default", applabel: "app=aegis", appkind: "deployment" } } } }]

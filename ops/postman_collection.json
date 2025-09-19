@@ -1,0 +1,96 @@
+{
+  "info": {
+    "name": "Aegis FraudStream",
+    "_postman_id": "aegis-collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base}}/healthz",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "healthz"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Inference",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-API-Key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"user_id\":\"u1\",\"amount\":10,\"tx_count_1h\":1,\"country_risk\":0.1}"
+        },
+        "url": {
+          "raw": "{{base}}/v1/inference",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "v1",
+            "inference"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Batch Inference",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-API-Key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[{\"user_id\":\"u1\",\"amount\":10,\"tx_count_1h\":1,\"country_risk\":0.1}]"
+        },
+        "url": {
+          "raw": "{{base}}/v1/batch/inference",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "v1",
+            "batch",
+            "inference"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base",
+      "value": "http://127.0.0.1:8080"
+    },
+    {
+      "key": "api_key",
+      "value": "<paste>"
+    }
+  ]
+}

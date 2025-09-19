@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "aegis-fraudstream.fullname" . }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: aegis.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "aegis-fraudstream.fullname" . }}
+                port:
+                  number: {{ .Values.service.port }}

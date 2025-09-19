@@ -1,0 +1,22 @@
+# syntax=docker/dockerfile:1.7
+FROM python:3.11-slim@sha256:3a7d4a6a79f7a9b7f4b7a8c1d5a6a2c6b0b0f0f0f0f0f0f0f0f0f0f0f0f0f0 AS build
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY pyproject.toml .
+COPY aegis_fraudstream aegis_fraudstream
+RUN pip install --no-cache-dir -e .
+
+FROM gcr.io/distroless/python3-debian12@sha256:9d9a8e7f2a5f5c7d9e4e9b22d2b8b6a8b9c9d9e8f7c7a6b5a4a3a2a1a0b0c0d0
+WORKDIR /app
+USER 65532:65532
+ENV PYTHONPATH=/app
+COPY --from=build /usr/local /usr/local
+COPY --from=build /app /app
+EXPOSE 8080
+ENV AEGIS_ENABLE_DOCS=false
+CMD ["-m", "uvicorn", "aegis_fraudstream.app:app", "--host", "0.0.0.0", "--port", "8080"]
+
+HEALTHCHECK --interval=30s --timeout=3s --retries=3 CMD python - <<'PY' || exit 1
+import urllib.request, os
+u=f"http://127.0.0.1:{os.getenv('PORT','8080')}/healthz"; urllib.request.urlopen(u, timeout=2).read(); print('ok')
+PY

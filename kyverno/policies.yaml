@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata: { name: enforce-nonroot }
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: require-nonroot
+      match: { resources: { kinds: ["Pod"] } }
+      validate:
+        message: "Containers must run as non-root"
+        pattern:
+          spec:
+            securityContext:
+              runAsNonRoot: true
+              seccompProfile:
+                type: RuntimeDefault
+            containers:
+            - securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]

@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: Apache-2.0
+version: "3.9"
+services:
+  api:
+    image: ghcr.io/ORG/REPO:main
+    ports: ["8080:8080"]
+    environment:
+      - AEGIS_ENV=production
+      - AEGIS_ENABLE_DOCS=false
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: ["ALL"]
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev
+    ulimits:
+      nofile: 65536
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M

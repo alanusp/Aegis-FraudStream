@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+groups:
+- name: aegis-slo
+  rules:
+  - record: job:http_request_rate:sum_1m
+    expr: sum(rate(http_requests_total[1m]))
+  - record: job:http_error_rate:ratio_5m
+    expr: sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))
+  - record: job:http_request_duration:p95_5m
+    expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))

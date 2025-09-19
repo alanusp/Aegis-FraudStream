@@ -1,0 +1,13 @@
+[Unit]
+Description=Aegis FraudStream API
+After=network.target
+
+[Service]
+User=www-data
+Environment=AEGIS_ENV=production
+WorkingDirectory=/opt/aegis
+ExecStart=/usr/bin/uvicorn aegis_fraudstream.app:app --host 0.0.0.0 --port 8080
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
