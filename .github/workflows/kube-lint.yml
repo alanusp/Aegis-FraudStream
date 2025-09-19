@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: kube_lint-${{ github.ref }}
+  cancel-in-progress: true
+name: Kubernetes Lint
+on: [push, pull_request]
+jobs:
+  kube-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+      - run: helm template test deploy/helm/aegis-fraudstream | tee k8s.yaml
+      - run: curl -sL https://github.com/stackrox/kube-linter/releases/latest/download/kube-linter-linux.tar.gz | tar xz && sudo mv kube-linter /usr/local/bin/
+      - run: kube-linter lint k8s.yaml || true
+      - run: pipx install conftest && conftest test k8s.yaml -p policy

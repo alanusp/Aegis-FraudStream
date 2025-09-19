@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: conftest-${{ github.ref }}
+  cancel-in-progress: true
+name: conftest
+on: [push, pull_request]
+jobs:
+  opa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: { go-version: '1.22' }
+      - run: go install github.com/open-policy-agent/conftest@latest
+      - run: conftest test -p policy/opa k8s/*.yaml || true

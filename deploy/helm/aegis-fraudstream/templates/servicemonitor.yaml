@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "aegis-fraudstream.fullname" . }}
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels: {{- include "aegis-fraudstream.selectorLabels" . | nindent 6 }}
+  endpoints:
+    - port: http
+      interval: 15s
+      path: /metrics

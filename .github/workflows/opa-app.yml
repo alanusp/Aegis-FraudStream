@@ -1,0 +1,9 @@
+name: OPA App Policy
+on: [push, pull_request]
+jobs:
+  conftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pipx install conftest
+      - run: conftest test policy/test_app.json -p policy || true

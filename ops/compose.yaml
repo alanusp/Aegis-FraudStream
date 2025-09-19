@@ -1,0 +1,40 @@
+# SPDX-License-Identifier: Apache-2.0
+version: "3.9"
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: aegis
+      POSTGRES_USER: aegis
+      POSTGRES_DB: aegis
+    volumes: [ "db_data:/var/lib/postgresql/data" ]
+    healthcheck: { test: ["CMD-SHELL","pg_isready -U aegis"], interval: 10s, timeout: 5s, retries: 5 }
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server","--appendonly","yes"]
+    volumes: [ "redis_data:/data" ]
+  api:
+    build:
+      context: ../..
+      dockerfile: docker/Dockerfile.secure
+    environment:
+      AEGIS_DB_URL: postgresql://aegis:aegis@db:5432/aegis
+      AEGIS_REDIS_URL: redis://redis:6379/0
+      AEGIS_ADMIN_TOKEN: admin
+      AEGIS_LOG_LEVEL: INFO
+    ports: [ "8080:8080" ]
+    depends_on: [ db, redis ]
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    volumes: [ "./prometheus.yml:/etc/prometheus/prometheus.yml:ro" ]
+    ports: [ "9090:9090" ]
+  grafana:
+    image: grafana/grafana:10.4.5
+    ports: [ "3000:3000" ]
+    volumes:
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/json:/var/lib/grafana/dashboards
+volumes:
+  db_data: {}
+  redis_data: {}

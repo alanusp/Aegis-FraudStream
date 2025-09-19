@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: openapi_lint-${{ github.ref }}
+  cancel-in-progress: true
+name: OpenAPI Lint
+on: [push, pull_request]
+jobs:
+  spectral:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm install -g @stoplight/spectral-cli
+      - run: python scripts/openapi_export.py openapi.json
+      - run: spectral lint -F warn openapi.json -r .spectral.yaml

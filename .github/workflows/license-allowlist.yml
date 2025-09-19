@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: license_allowlist-${{ github.ref }}
+  cancel-in-progress: true
+name: License Allowlist
+on: [push, pull_request]
+jobs:
+  check-licenses:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -e .[dev] pip-licenses
+      - run: pip-licenses --format=json --with-licenses > licenses.json
+      - name: Enforce allowlist
+        run: |
+          python - <<'PY'
+import json, sys
+allow = {"Apache-2.0","MIT","BSD-2-Clause","BSD-3-Clause","ISC","Python-2.0"}
+bad=[]
+for p in json.load(open('licenses.json')):
+  lic = p.get('License','').split(';')[0].strip()
+  if lic and lic not in allow:
+    bad.append((p.get('Name'), lic))
+if bad:
+  print('Disallowed licenses:', bad)
+  sys.exit(1)
+print('All licenses allowed')
+PY

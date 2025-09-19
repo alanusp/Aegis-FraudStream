@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: opa-${{ github.ref }}
+  cancel-in-progress: true
+name: OPA tests
+on: [push, pull_request]
+jobs:
+  opa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: open-policy-agent/setup-opa@v2
+      - run: opa test opa -v

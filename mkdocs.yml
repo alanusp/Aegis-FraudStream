@@ -1,0 +1,40 @@
+# SPDX-License-Identifier: Apache-2.0
+site_name: Aegis FraudStream
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - Operations: docs/OPERATIONS_RUNBOOK.md
+  - Disaster Recovery: docs/DISASTER_RECOVERY.md
+  - SLOs: docs/SLO.md
+  - Privacy: docs/PRIVACY_PRACTICES.md
+  - Threat Model: docs/THREAT_MODEL.md
+  - Hardening: docs/HARDENING.md
+  - Whitepaper: WHITEPAPER.md
+  - API: docs/openapi.yaml
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+  - autorefs
+
+nav:
+  - Home: index.md
+  - API Reference: docs/api.md
+  - Whitepaper: WHITEPAPER.md
+  - OpenAPI: docs/openapi.yaml
+
+nav:
+  - Helm: deploy/helm/README.md
+
+nav:
+  - Ethics: ETHICS.md
+  - Privacy: PRIVACY.md
+  - Accessibility (VPAT): VPAT.md
+  - SLOs: SLO.md
+  - SOC2 Mapping: SOC2_MAPPING.md
+  - RFC Template: docs/RFC_TEMPLATE.md

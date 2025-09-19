@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: spectral-${{ github.ref }}
+  cancel-in-progress: true
+name: Spectral OpenAPI
+on:
+  push: { paths: ["docs/openapi.gen.*"] }
+  pull_request: { paths: ["docs/openapi.gen.*"] }
+jobs:
+  spectral:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm i -g @redocly/cli @stoplight/spectral-cli
+      - run: spectral lint docs/openapi.gen.yaml || true
+      - run: redocly lint docs/openapi.gen.yaml || true

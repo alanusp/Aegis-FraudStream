@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: precommit_autoupdate-${{ github.ref }}
+  cancel-in-progress: true
+name: Pre-commit Autoupdate
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+jobs:
+  autoupdate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { token: ${{ secrets.GITHUB_TOKEN }} }
+      - uses: pre-commit-ci/autoupdate@v1.0.1
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          title: "chore(pre-commit): autoupdate hooks"
+          commit-message: "chore(pre-commit): autoupdate hooks"
+          branch: chore/pre-commit-autoupdate

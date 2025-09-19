@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: kube_linter-${{ github.ref }}
+  cancel-in-progress: true
+name: kube-linter
+on: [pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: stackrox/kube-linter-action@v1.0.6
+        with:
+          config: ""
+          targets: |
+            k8s/
+            charts/aegis/templates

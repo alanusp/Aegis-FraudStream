@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: promtool-${{ github.ref }}
+  cancel-in-progress: true
+name: Prometheus Lint
+on: [push, pull_request]
+jobs:
+  promtool:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install promtool
+        run: |
+          curl -sL https://github.com/prometheus/prometheus/releases/download/v2.54.1/prometheus-2.54.1.linux-amd64.tar.gz | tar xz
+          sudo mv prometheus-2.54.1.linux-amd64/promtool /usr/local/bin/
+      - name: Lint rules
+        run: promtool check rules monitoring/alerts.yaml

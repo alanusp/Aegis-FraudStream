@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: client_python-${{ github.ref }}
+  cancel-in-progress: true
+name: OpenAPI Python Client
+on:
+  workflow_dispatch:
+  push:
+    paths: ["docs/openapi.gen.*"]
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install openapi-python-client
+      - run: openapi-python-client generate --path docs/openapi.gen.yaml --meta setup.py --output clients/python --overwrite
+      - uses: actions/upload-artifact@v4
+        with: { name: python-client, path: clients/python }

@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: openapi_drift-${{ github.ref }}
+  cancel-in-progress: true
+name: OpenAPI Drift
+on: [push, pull_request]
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: python -m pip install -U pip uv pyyaml
+      - run: uv pip install -e ".[dev]" --system
+      - run: python scripts/generate_openapi.py > docs/openapi.gen.yaml
+      - run: diff -u docs/openapi.yaml docs/openapi.gen.yaml || (echo 'OpenAPI drift detected; please update docs.' && exit 1)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openapi-gen
+          path: docs/openapi.gen.yaml

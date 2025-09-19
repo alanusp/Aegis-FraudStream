@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.dist/
+.site/
+.coverage
+htmlcov/
+.sbom/
+openapi.json
+sbom.json
+.env
+.DS_Store

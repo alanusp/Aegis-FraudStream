@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: release_please-${{ github.ref }}
+  cancel-in-progress: true
+name: release-please
+on:
+  push: { branches: ["main"] }
+permissions: { contents: write, pull-requests: write }
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v4
+        with:
+          release-type: python

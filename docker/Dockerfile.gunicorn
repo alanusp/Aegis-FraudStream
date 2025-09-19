@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: Apache-2.0
+FROM python:3.11-slim
+RUN useradd -r -u 10001 -g users aegis && pip install --no-cache-dir gunicorn uvicorn
+WORKDIR /app
+COPY . /app
+RUN pip install --no-cache-dir -e .
+EXPOSE 8080
+USER 10001
+ENV WEB_CONCURRENCY=2 TIMEOUT=60
+CMD ["gunicorn","-k","uvicorn.workers.UvicornWorker","-w","2","-b","0.0.0.0:8080","aegis_fraudstream.app:app","--timeout","60","--graceful-timeout","30","--access-logfile","-"]
+
+HEALTHCHECK CMD python -c "import urllib.request,sys;sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8080/health').getcode()==200 else 1)"

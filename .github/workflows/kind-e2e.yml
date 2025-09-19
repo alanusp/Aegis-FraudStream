@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: kind_e2e-${{ github.ref }}
+  cancel-in-progress: true
+name: Kind E2E
+on: [push, pull_request]
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: helm/kind-action@v1.10.0
+      - uses: actions/setup-python@v5
+      with: { python-version: '3.11' }
+      
+      - uses: azure/setup-helm@v4
+      - run: python -m pip install -U pip requests
+      - run: helm install aegis ./deploy/helm/aegis-fraudstream
+      - run: kubectl wait --for=condition=available --timeout=180s deploy/aegis-fraudstream
+      - run: kubectl port-forward deploy/aegis-fraudstream 8085:8080 &
+      - run: sleep 5 && curl -f http://127.0.0.1:8085/health
+      - run: |
+          python - <<'PY'
+          import requests, json, time
+          time.sleep(2)
+          evt={"user_id":"u","amount":12.34}
+          r=requests.post("http://127.0.0.1:8085/v1/score", json=evt, timeout=5)
+          r.raise_for_status()
+          js=r.json()
+          assert "score" in js and 0.0 <= js["score"] <= 1.0
+          PY

@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: pyright-${{ github.ref }}
+  cancel-in-progress: true
+name: Pyright
+on: [push, pull_request]
+jobs:
+  pyright:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: npm install -g pyright
+      - run: pyright

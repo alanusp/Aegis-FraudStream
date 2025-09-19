@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: Apache-2.0
+version: 1
+rules:
+  - if: "score >= 0.95"
+    decision: "block"
+    reason: "critical risk"
+  - if: "score >= 0.80"
+    decision: "review"
+    reason: "elevated risk"
+  - if: "score >= 0.0"
+    decision: "approve"
+    reason: "nominal"

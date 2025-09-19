@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: ts_client-${{ github.ref }}
+  cancel-in-progress: true
+name: TypeScript Client
+on: [push, pull_request]
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm -g i openapi-typescript@7.4.2
+      - run: npx openapi-typescript docs/openapi.yaml -o clients/typescript/client.ts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ts-client
+          path: clients/typescript/client.ts

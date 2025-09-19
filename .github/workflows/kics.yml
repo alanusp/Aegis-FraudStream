@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: kics-${{ github.ref }}
+  cancel-in-progress: true
+name: KICS
+on: [push, pull_request]
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Checkmarx/kics-github-action@v2.1.0
+        with:
+          path: .
+          platform_type: kubernetes
+          output_path: kics-results

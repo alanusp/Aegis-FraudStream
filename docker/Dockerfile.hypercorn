@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: Apache-2.0
+FROM python:3.11-slim
+RUN useradd -r -u 10001 -g users aegis && pip install --no-cache-dir hypercorn h2
+WORKDIR /app
+COPY . /app
+RUN pip install --no-cache-dir -e .
+USER 10001
+EXPOSE 8443
+CMD ["hypercorn","aegis_fraudstream.app:app","--bind","0.0.0.0:8443","--certfile","/app/certs/dev.crt","--keyfile","/app/certs/dev.key","--alpn-protocols","h2,http/1.1"]
+
+HEALTHCHECK CMD python -c "import urllib.request,sys;sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8080/health').getcode()==200 else 1)"

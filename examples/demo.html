@@ -1,0 +1,15 @@
+<!doctype html><meta charset="utf-8"><title>Aegis Demo</title>
+<style>body{font-family:system-ui;margin:2rem;}input,button{font-size:1rem;padding:.4rem;margin:.2rem}</style>
+<h1>Aegis FraudStream Demo</h1>
+<label>User ID <input id=u value="u1"></label>
+<label>Amount <input id=a type=number value=10></label>
+<label>Tx last hour <input id=t type=number value=1></label>
+<label>Country risk <input id=c type=number step=0.01 value=0.1 min=0 max=1></label>
+<button onclick="run()">Infer</button>
+<pre id=out></pre>
+<script>
+async function run(){
+  const r = await fetch('/v1/inference',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({user_id:u.value,amount:+a.value,tx_count_1h:+t.value,country_risk:+c.value})});
+  out.textContent = await r.text();
+}
+</script>

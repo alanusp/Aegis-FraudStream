@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: grype-${{ github.ref }}
+  cancel-in-progress: true
+name: Grype SBOM Scan
+on: [push, pull_request]
+jobs:
+  grype:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anchore/scan-action@v3
+        with:
+          path: .
+          fail-build: true

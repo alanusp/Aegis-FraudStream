@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: container_structure_test-${{ github.ref }}
+  cancel-in-progress: true
+name: Container Structure Test
+on: [push, pull_request]
+jobs:
+  cst:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: docker build -t testimg -f docker/Dockerfile .
+      - name: Install container-structure-test
+        run: |
+          curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64
+          chmod +x container-structure-test-linux-amd64
+          sudo mv container-structure-test-linux-amd64 /usr/local/bin/container-structure-test
+      - name: Run tests
+        run: container-structure-test test --image testimg --config cst/config.yaml

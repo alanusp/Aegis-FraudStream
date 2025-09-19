@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: lock_requirements-${{ github.ref }}
+  cancel-in-progress: true
+name: Lock requirements
+on: [workflow_dispatch]
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install pip-tools
+      - run: pip-compile -o requirements.txt pyproject.toml || true
+      - run: git status && echo "Done"

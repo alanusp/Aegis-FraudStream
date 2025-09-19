@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: provenance-${{ github.ref }}
+  cancel-in-progress: true
+name: Build Provenance
+on:
+  release:
+    types: [published]
+jobs:
+  attest:
+    runs-on: ubuntu-latest
+    permissions: { id-token: write, contents: read, attestations: write }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t ghcr.io/${{ github.repository }}:${{ github.ref_name }} -f docker/Dockerfile .
+      - name: Push
+        run: echo "Skipped push in template"
+      - name: Attest
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ghcr.io/${{ github.repository }}
+          subject-digest: ${{ steps.meta.outputs.digest }}
+          push-to-registry: false

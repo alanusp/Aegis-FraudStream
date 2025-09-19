@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: openapi_validate-${{ github.ref }}
+  cancel-in-progress: true
+name: OpenAPI Validate
+on: [push, pull_request]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: redocly/openapi-cli-action@v1
+        with:
+          args: lint docs/openapi.yaml

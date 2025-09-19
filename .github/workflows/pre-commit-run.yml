@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: pre_commit_run-${{ github.ref }}
+  cancel-in-progress: true
+name: Pre-commit
+on: [push, pull_request]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pre-commit/action@v3.0.1

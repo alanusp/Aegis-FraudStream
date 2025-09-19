@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: syft-${{ github.ref }}
+  cancel-in-progress: true
+name: SBOM (Syft)
+on: [push, pull_request]
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: docker build -t aegis:sbom -f docker/Dockerfile .
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: "aegis:sbom"
+          format: cyclonedx-json
+          output-file: sbom-image.cdx.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sbom-image
+          path: sbom-image.cdx.json

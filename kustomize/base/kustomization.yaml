@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
+resources:
+  - ../../k8s/rollout.yaml
+namespace: aegis

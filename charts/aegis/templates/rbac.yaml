@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: { name: {{ include "aegis.fullname" . }}, namespace: {{ .Release.Namespace }} }
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get","list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: { name: {{ include "aegis.fullname" . }}, namespace: {{ .Release.Namespace }} }
+subjects: [{ kind: ServiceAccount, name: {{ include "aegis.fullname" . }} }]
+roleRef: { apiGroup: rbac.authorization.k8s.io, kind: Role, name: {{ include "aegis.fullname" . }} }

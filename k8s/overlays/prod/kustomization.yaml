@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: Apache-2.0
+resources:
+  - ../../base
+  - ../../priorityclass.yaml
+  - ingress.yaml
+  - hpa.yaml
+
+patchesStrategicMerge:
+  - patch-priority.yaml
+  - patch-antiaffinity.yaml
+  - patch-security.yaml
+
+patchesStrategicMerge:
+  - patch-priority.yaml
+  - patch-antiaffinity.yaml
+  - patch-spread.yaml

@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: sign_wheels-${{ github.ref }}
+  cancel-in-progress: true
+name: Sign Wheels
+on:
+  release:
+    types: [published]
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    permissions: { id-token: write, contents: write }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install build && python -m build
+      - name: Sign distributions
+        uses: sigstore/gh-action-sigstore-python@v2.1.1
+        with:
+          inputs: "dist/*"

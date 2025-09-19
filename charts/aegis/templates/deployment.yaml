@@ -1,0 +1,38 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: {{ include "aegis.fullname" . }} }
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector: { matchLabels: { app: {{ include "aegis.name" . }} } }
+  template:
+    metadata: { labels: { app: {{ include "aegis.name" . }} } }
+    spec:
+      serviceAccountName: {{ include "aegis.fullname" . }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels: { app: {{ include "aegis.name" . }} }
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 65532
+      containers:
+        - name: api
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+        - name: http
+          containerPort: 8080
+          env:
+          {{- toYaml .Values.env | nindent 12 }}
+          readinessProbe: { httpGet: { path: /ready, port: 8080 }, initialDelaySeconds: 3, periodSeconds: 5 }
+          livenessProbe: { httpGet: { path: /live, port: 8080 }, initialDelaySeconds: 3, periodSeconds: 5 }
+          resources: {{- toYaml .Values.resources | nindent 12 }}

@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: sbom_release-${{ github.ref }}
+  cancel-in-progress: true
+name: SBOM Attach
+on:
+  release: { types: [created] }
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          artifact-name: sbom-spdx.json

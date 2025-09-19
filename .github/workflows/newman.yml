@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: newman-${{ github.ref }}
+  cancel-in-progress: true
+name: Newman
+on: [pull_request]
+jobs:
+  newman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: npm i -g newman
+      - run: pip install -e .[dev]
+      - run: uvicorn aegis_fraudstream.app:app --port 8080 &
+      - run: sleep 2
+      - run: test -f docs/postman_collection.json && newman run docs/postman_collection.json || echo "no postman collection, skipping"

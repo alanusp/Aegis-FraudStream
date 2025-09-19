@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: licenses-${{ github.ref }}
+  cancel-in-progress: true
+name: Licenses
+on: [push, pull_request]
+jobs:
+  pip-licenses:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: python -m pip install -U pip uv pip-licenses
+      - run: uv pip install -e ".[dev]" --system
+      - run: pip-licenses --format=markdown --with-authors --with-urls > THIRD_PARTY_NOTICES.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: third-party-notices
+          path: THIRD_PARTY_NOTICES.md

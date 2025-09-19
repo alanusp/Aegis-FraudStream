@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "aegis-fraudstream.fullname" . }}
+  labels: {{- include "aegis-fraudstream.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  selector: {{- include "aegis-fraudstream.selectorLabels" . | nindent 6 }}
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}

@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
+creation_rules:
+  - path_regex: secrets/.*\.enc$
+    age: ["age1exampleexampleexampleexampleexampleexampleexamplexyz"]

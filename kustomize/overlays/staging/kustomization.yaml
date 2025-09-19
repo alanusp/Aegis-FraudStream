@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0
+resources: [ ../../base ]
+patches:
+  - target: { kind: Rollout, name: aegis }
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 2

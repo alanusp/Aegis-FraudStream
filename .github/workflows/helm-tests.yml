@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: helm_tests-${{ github.ref }}
+  cancel-in-progress: true
+name: Helm Tests
+on: [push, pull_request]
+jobs:
+  helm-unittest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install helm and plugin
+        run: |
+          curl -sSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+          helm plugin install https://github.com/quintush/helm-unittest
+      - name: Run tests
+        run: helm unittest charts/aegis

@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+- score: 0.99
+  expect: block
+- score: 0.85
+  expect: review
+- score: 0.10
+  expect: approve

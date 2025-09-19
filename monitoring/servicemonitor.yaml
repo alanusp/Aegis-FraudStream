@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata: { name: aegis, namespace: monitoring }
+spec:
+  selector: { matchLabels: { app: aegis } }
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s

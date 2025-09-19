@@ -1,0 +1,43 @@
+{
+  "title": "Aegis FraudStream",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "HTTP RPS",
+      "targets": [
+        {
+          "expr": "sum(rate(http_requests_total[1m]))"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "p95 Inference Latency",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(aegis_inference_seconds_bucket[5m])) by (le))"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "429 Rate",
+      "targets": [
+        {
+          "expr": "sum(rate(http_requests_total{status=\"429\"}[5m]))"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Decisions allow/review/block",
+      "targets": [
+        {
+          "expr": "sum(increase(DECISIONS_total[5m])) by (decision)"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 30,
+  "version": 1
+}

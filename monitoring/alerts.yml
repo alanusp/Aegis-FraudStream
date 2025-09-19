@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: Apache-2.0
+groups:
+- name: aegis-rules
+  rules:
+  - alert: HighErrorRate
+    expr: sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m])) > 0.05
+    for: 10m
+    labels: { severity: page }
+    annotations: { summary: "High 5xx rate" }
+  - alert: HighLatencyP95
+    expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 0.15
+    for: 10m
+    labels: { severity: ticket }
+    annotations: { summary: "Latency p95 > 150ms" }

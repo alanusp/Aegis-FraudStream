@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: sbom_attest-${{ github.ref }}
+  cancel-in-progress: true
+name: SBOM Attest
+on:
+  push:
+    tags: ['v*.*.*']
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anchore/syft-action@v0.16.0
+        with:
+          image: ghcr.io/${{ github.repository }}:latest
+          output: sbom.spdx.json
+      - uses: sigstore/cosign-installer@v3.5.0
+      - name: Attest SBOM
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: cosign attest --predicate sbom.spdx.json --type spdx ghcr.io/${{ github.repository }}:latest --yes

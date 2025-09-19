@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: aegis-fraudstream
+  description: Fraud scoring API and SDK
+  tags: [python, fastapi, security, streaming]
+spec:
+  type: service
+  owner: team-security
+  lifecycle: production

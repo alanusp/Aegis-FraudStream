@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: uv_lock-${{ github.ref }}
+  cancel-in-progress: true
+name: UV Lock Drift
+on: [push, pull_request]
+jobs:
+  lock:
+    if: ${{ hashFiles('uv.lock') != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pipx install uv
+      - run: uv lock
+      - run: git diff --exit-code || (echo "uv.lock drift detected" && exit 1)

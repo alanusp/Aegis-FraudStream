@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: batch/v1
+kind: CronJob
+metadata: { name: aegis-retention, namespace: aegis }
+spec:
+  schedule: "0 3 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: purge
+              image: ghcr.io/OWNER/REPO:latest
+              env:
+                - name: AEGIS_DB_URL
+                  valueFrom: { secretKeyRef: { name: aegis-secrets, key: db_url } }
+              command: ["python","scripts/retention_purge.py","--days","90"]

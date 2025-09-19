@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: links-${{ github.ref }}
+  cancel-in-progress: true
+name: Link Check
+on: [push, pull_request]
+jobs:
+  lychee:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@v1
+        with:
+          args: --verbose --no-progress --timeout 20 --exclude-mail --accept 200,206 .

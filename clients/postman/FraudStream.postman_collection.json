@@ -1,0 +1,67 @@
+{
+  "info": {
+    "name": "Aegis FraudStream",
+    "_postman_id": "00000000-0000-0000-0000-000000000000",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Inference",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/v1/inference",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "v1",
+            "inference"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"user_id\": \"u1\", \"amount\": 10, \"tx_count_1h\": 1, \"country_risk\": 0.1}"
+        }
+      }
+    },
+    {
+      "name": "Decision",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/v1/decision",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "v1",
+            "decision"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"user_id\": \"u1\", \"amount\": 10, \"tx_count_1h\": 1, \"country_risk\": 0.1}"
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base",
+      "value": "http://127.0.0.1:8080"
+    }
+  ]
+}

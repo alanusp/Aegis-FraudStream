@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: helm_ct-${{ github.ref }}
+  cancel-in-progress: true
+name: Helm Chart Testing
+on: [push, pull_request]
+jobs:
+  ct:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+      - uses: helm/chart-testing-action@v2.6.1
+      - run: ct lint --chart-dirs deploy/helm --validate-maintainers=false

@@ -1,0 +1,43 @@
+# SPDX-License-Identifier: Apache-2.0
+image:
+  repository: ghcr.io/OWNER/REPO
+  tag: latest
+  pullPolicy: IfNotPresent
+
+replicaCount: 2
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  limits: { cpu: "500m", memory: "512Mi" }
+  requests: { cpu: "100m", memory: "256Mi" }
+
+env:
+  - name: AEGIS_ENABLE_DOCS
+    value: "true"
+
+ingress:
+  enabled: false
+  className: nginx
+  hosts:
+    - host: aegis.example.com
+      paths: [ { path: /, pathType: Prefix } ]
+
+serviceMonitor:
+  enabled: true
+  interval: 15s
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 1000m
+    memory: 512Mi
+podAnnotations:
+  pod-security.kubernetes.io/enforce: baseline
+  pod-security.kubernetes.io/audit: restricted
+metrics:
+  serviceMonitor:
+    enabled: false

@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: checkov-${{ github.ref }}
+  cancel-in-progress: true
+name: Checkov
+on: [push, pull_request]
+jobs:
+  checkov:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: .
+          quiet: true

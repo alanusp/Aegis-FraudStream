@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: osv-${{ github.ref }}
+  cancel-in-progress: true
+name: OSV Scanner
+on: [push, pull_request]
+jobs:
+  osv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google/osv-scanner-action@v1
+        with:
+          scan-args: |
+            --recursive .

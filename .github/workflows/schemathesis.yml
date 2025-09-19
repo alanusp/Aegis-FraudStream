@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: schemathesis-${{ github.ref }}
+  cancel-in-progress: true
+name: Schemathesis
+on: [push, pull_request]
+jobs:
+  st:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -e .[dev] schemathesis
+      - run: python scripts/openapi_export.py openapi.json
+      - run: schemathesis run --checks all --hypothesis-deadline=500 openapi.json --workers=2

@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: aegis-api }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: aegis } }
+  template:
+    metadata: { labels: { app: aegis } }
+    spec:
+      securityContext: { runAsNonRoot: true, runAsUser: 10001 }
+      containers:
+      - name: api
+        image: ghcr.io/ORG/REPO:main
+        ports: [{ containerPort: 8080 }]
+        env: [{ name: AEGIS_ENV, value: "production" }]
+        resources: { requests: { cpu: "100m", memory: "128Mi" }, limits: { cpu: "500m", memory: "512Mi" } }
+        readinessProbe: { httpGet: { path: /ready, port: 8080 } }
+        livenessProbe: { httpGet: { path: /health, port: 8080 } }

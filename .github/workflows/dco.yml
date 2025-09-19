@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: dco-${{ github.ref }}
+  cancel-in-progress: true
+name: DCO
+on: [pull_request_target]
+jobs:
+  dco-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: timja/dco-check@v1

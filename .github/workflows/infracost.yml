@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: infracost-${{ github.ref }}
+  cancel-in-progress: true
+name: Infracost
+on:
+  pull_request:
+    paths: ["infra/**"]
+jobs:
+  infracost:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: infracost/actions/setup@v3
+      - run: infracost breakdown --path=infra/terraform --format=json --out-file=infracost.json || true
+      - uses: actions/upload-artifact@v4
+        with: { name: infracost, path: infracost.json }

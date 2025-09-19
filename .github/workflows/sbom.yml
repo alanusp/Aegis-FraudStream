@@ -1,0 +1,27 @@
+# SPDX-License-Identifier: Apache-2.0
+concurrency:
+  group: sbom-${{ github.ref }}
+  cancel-in-progress: true
+name: SBOM
+on: [push, workflow_dispatch]
+jobs:
+  syft-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -f docker/Dockerfile --tag local/aegis:sbom . || docker build -f docker/Dockerfile.secure --tag local/aegis:sbom .
+      - uses: anchore/sbom-action@v0.16.0
+        with:
+          image: local/aegis:sbom
+          artifact-name: sbom-syft.spdx.json
+  cyclonedx-python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install cyclonedx-bom
+      - run: cyclonedx-bom -o sbom-cdx.json -e . || cyclonedx-bom -o sbom-cdx.json
+      - uses: actions/upload-artifact@v4
+        with: { name: sbom-cdx, path: sbom-cdx.json }
